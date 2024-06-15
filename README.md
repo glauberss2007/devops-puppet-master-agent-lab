@@ -1,6 +1,3 @@
-Sure! Here is the updated `README.md` with a new section about Puppet classes and additional references:
-
-```markdown
 # DevOps Puppet Master-Agent Lab
 
 This repository contains training materials provided by Learning IT Guide.
