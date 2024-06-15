@@ -4,6 +4,28 @@ This repository contains training materials provided by Learning IT Guide.
 
 ![Training Image](https://github.com/glauberss2007/devops-puppet-master-agent-lab/assets/22028539/a2186ac3-13a7-44ef-b092-f2ca2a373a32)
 
+## Index
+1. [Puppet Agent and Server Configuration](#puppet-agent-and-server-configuration)
+    - [Prerequisites](#prerequisites)
+    - [Configuration Steps](#configuration-steps)
+    - [Installation](#installation)
+    - [Install Required Packages on the Master Node](#install-required-packages-on-the-master-node-puppet)
+    - [Configure the Puppet Master Server](#configure-the-puppet-master-server-puppet)
+    - [Generate the Certificate from the Puppet Master Node](#generate-the-certificate-from-the-puppet-master-node-puppet)
+    - [Install Puppet Agent Packages on the Client Node](#install-puppet-agent-packages-on-the-client-node-client1)
+    - [Configure the Puppet Agent on the Client](#configure-the-puppet-agent-on-the-client)
+    - [Generate the Signing Request Certificate from the Puppet Agent Node](#generate-the-signing-request-certificate-from-the-puppet-agent-node-client1)
+    - [Sign the Certificates from the Puppet Master Node](#sign-the-certificates-from-the-puppet-master-node-puppet)
+    - [Verify the Certificate is Signed Properly with the Puppet Master Node](#verify-the-certificate-is-signed-properly-with-the-puppet-master-node)
+2. [Puppet Manifest Examples](#puppet-manifest-examples)
+    - [Scenario 1 - Change File and Service Status](#scenario-1---change-file-and-service-status)
+3. [Puppet Modules](#puppet-modules)
+    - [Understanding Puppet Classes](#understanding-puppet-classes)
+    - [Scenario 2 - Web Server Apache Module](#scenario-2---web-server-apache-module)
+    - [Installing Puppet Offline Modules](#installing-puppet-offline-modules)
+    - [Installing Puppet Online Modules](#installing-puppet-online-modules)
+4. [References](#references)
+
 ## Puppet Agent and Server Configuration
 
 ### Prerequisites:
