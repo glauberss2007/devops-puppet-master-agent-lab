@@ -108,12 +108,24 @@ puppet cert sign puppet-client-name
 puppet agent --fingerprint
 ```
 
+## Puppet manifest examples
+
+Manifests are files with extension .pp, normally at /etc/puppet/manifests/ directory at puppet master. There we declare all the resource types status to be managed.
+
+### Scenario 1
+
+1000 servers conected to puppet master require the following operation managment:
+
+- Modifying the file /etc/motd in all infra servers to add a content using puppet automation.
+- Stopping postfix service in all servers.
+
+Into the puppet server, go to the folder /etc/puppet/manifest/ and edit or creat the file site.pp with the content in []().
 
 
+## Puppet modules
 
-
-
-
+## Online & Offline modules
 
 ## References
+- https://www.youtube.com/watch?v=jaA1Znru-Vw
 - www.learnitguide.net
