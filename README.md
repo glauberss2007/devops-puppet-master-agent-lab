@@ -1,55 +1,57 @@
-# devops-puppet-master-agent-lab
-Training provioded by learning IT guide.
+Sure! Here is the updated `README.md` with a new section about Puppet classes and additional references:
 
-![image](https://github.com/glauberss2007/devops-puppet-master-agent-lab/assets/22028539/a2186ac3-13a7-44ef-b092-f2ca2a373a32)
+```markdown
+# DevOps Puppet Master-Agent Lab
 
-## Puppet agent and server configuration
+This repository contains training materials provided by Learning IT Guide.
 
-### Prerequisits:
-1. Make sure both servers are accessible.
-2. Internet will be necessary to install puppet packages.
-3. DNS already configureed or etc/hosts for server name comunication.
-4. Port 8140 opened on puppet server.
+![Training Image](https://github.com/glauberss2007/devops-puppet-master-agent-lab/assets/22028539/a2186ac3-13a7-44ef-b092-f2ca2a373a32)
 
-### Steps:
-1. Install puppet labs repo on both nodes.
-2. Install required packages on the master node "puppet".
-3. Configure the puppet master server "puppet".
-4. Generate the certificate from the puppet master node "puppet".
-5. Install puppet agent packages on the client node "client1".
-6. Configure the puppet agent on the client node "client1".
-7. Generate the signing request certificate from the puppet agent node "client1".
-8. Sign the certificates to be signed from the puppet master node "puppet".
-9. Verify the certificate signed properly with the puppet master node?
+## Puppet Agent and Server Configuration
+
+### Prerequisites:
+1. Ensure both servers (master and agent) are accessible.
+2. Internet connectivity is required to install Puppet packages.
+3. Configure DNS or `/etc/hosts` for server name communication.
+4. Open port 8140 on the Puppet server.
+
+### Configuration Steps:
+1. Install Puppet Labs repository on both nodes.
+2. Install required packages on the master node (`puppet`).
+3. Configure the Puppet master server (`puppet`).
+4. Generate the certificate from the Puppet master node (`puppet`).
+5. Install Puppet agent packages on the client node (`client1`).
+6. Configure the Puppet agent on the client node (`client1`).
+7. Generate the signing request certificate from the Puppet agent node (`client1`).
+8. Sign the certificates from the Puppet master node (`puppet`).
+9. Verify the certificate is signed properly with the Puppet master node.
 
 ### Installation
 
-In the puppet master and clients execute:
-```
+On both the Puppet master and clients, execute:
+```sh
 yum -y update
-yum -y isntall http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+yum -y install http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
 ```
 
-Confirm the puppetlabs at /etc/yum.repos.d.
+Confirm the Puppet Labs repository is added in `/etc/yum.repos.d`.
 
-### Install required packages on the master node "puppet"
+### Install Required Packages on the Master Node (`puppet`)
 
-Now isntall the server on master:
-```
+Install the Puppet server on the master node:
+```sh
 yum -y install puppet-server
 ```
 
-### Configure the puppet master server "puppet"
+### Configure the Puppet Master Server (`puppet`)
 
-Acces the /etc/puppet/puppet.conf
-```
+Edit the configuration file `/etc/puppet/puppet.conf`:
+```sh
 nano /etc/puppet/puppet.conf
 ```
 
-In thos file, main is for server and agent for clients:
-
-For server conf file add:
-```
+Add the following in the `[main]` section:
+```conf
 [main]
 ...
 dns_alt_names = puppet, puppetmaster, others...
@@ -57,75 +59,143 @@ certname = puppet
 ...
 ```
 
-### Generate the certificate from the puppet master node "puppet".
-Them execute:
-```
+### Generate the Certificate from the Puppet Master Node (`puppet`)
+
+Execute:
+```sh
 sudo -u puppet puppet master --no-daemonize --verbose
 ```
 
-As soos as you see the puppet version, execute a CRTL+c. (certificate created.
+As soon as you see the Puppet version, stop the process with `CTRL+C`. The certificate is now created.
 
-Now enable it:
-```
+Enable and start the Puppet master service:
+```sh
 systemctl start puppetmaster
 systemctl enable puppetmaster
 ```
 
-### Install puppet agent packages on the client node "client1".
-```
+### Install Puppet Agent Packages on the Client Node (`client1`)
+
+Install the Puppet agent:
+```sh
 yum -y install puppet
 ```
 
-## Configure the puppet agent on the client.
+### Configure the Puppet Agent on the Client
 
-Go to the congif file and add at agent:
-```
+Edit the configuration file and add the server name in the `[agent]` section:
+```conf
 server = puppetmastername
 ```
-Save and ping the master to confir the comunication.
+Save and test the connection to the master by pinging the master server.
 
-## Generate the signing request certificate from the puppet agent node "client"
+### Generate the Signing Request Certificate from the Puppet Agent Node (`client1`)
 
-To create the certificate:
-```
+Create the certificate:
+```sh
 puppet agent -t
 ```
 
-## Sign the certificates to be signed from the puppet master node "puppet"
+### Sign the Certificates from the Puppet Master Node (`puppet`)
 
-Access the server and show the certificats waiting for liberation:
-```
+On the master server, list the certificates waiting to be signed:
+```sh
 puppet cert list
 ```
 
-Them sign it using 
-```
+Sign the certificate:
+```sh
 puppet cert sign puppet-client-name
 ```
 
-### Verify the certificate signed properly with the puppet master node?
-```
+### Verify the Certificate is Signed Properly with the Puppet Master Node
+
+Check the certificate fingerprint:
+```sh
 puppet agent --fingerprint
 ```
 
-## Puppet manifest examples
+## Puppet Manifest Examples
 
-Manifests are files with extension .pp, normally at /etc/puppet/manifests/ directory at puppet master. There we declare all the resource types status to be managed.
+Manifests are files with the `.pp` extension, typically located in the `/etc/puppet/manifests/` directory on the Puppet master. These files declare the resource types and their desired states to be managed.
 
-### Scenario 1
+### Scenario 1 - Change File and Service Status
 
-1000 servers conected to puppet master require the following operation managment:
+For 1000 servers connected to the Puppet master, perform the following operations:
+- Modify the `/etc/motd` file to add content using Puppet automation.
+- Stop the postfix service on all servers.
 
-- Modifying the file /etc/motd in all infra servers to add a content using puppet automation.
-- Stopping postfix service in all servers.
+On the Puppet server, go to the `/etc/puppet/manifests/` folder and edit or create the `site.pp` file with the desired content.
 
-Into the puppet server, go to the folder /etc/puppet/manifest/ and edit or creat the file site.pp with the content in []().
+Use the `file` and `service` Puppet resources. Check available resources with `puppet resource --types`. For specific service status, use `puppet resource service postfix` or `puppet resource file /etc/motd`.
 
+Clients periodically check the Puppet server for updates. To manually check for changes, use `puppet agent -t`.
 
-## Puppet modules
+To change the interval for server checks, add `runinterval = 15m` in the `[agent]` section of the Puppet agent configuration file (`/etc/puppet/puppet.conf`).
 
-## Online & Offline modules
+## Puppet Modules
+
+A module is a collection of manifests and data (facts, files, templates, etc.) with a specific structure.
+
+### Understanding Puppet Classes
+
+A class in Puppet is a block of code that can be reused and included in different manifests. Classes help in organizing code and managing resources efficiently. They are defined in modules and can be applied to nodes or other classes. For example:
+
+```puppet
+class apache {
+    package { 'httpd':
+        ensure => installed,
+    }
+    service { 'httpd':
+        ensure => running,
+        enable => true,
+    }
+}
+```
+
+Classes can be included in manifests or other classes using the `include` statement:
+
+```puppet
+include apache
+```
+
+### Scenario 2 - Web Server Apache Module
+
+Install and manage the Apache web server using a single manifest file. By using modules, operations are split into multiple manifest files and declared as classes using the `include` statement. Implementing Puppet modules makes the main file smaller and more readable.
+
+More than 4000 Puppet modules are available from the community on Forge and GitHub.
+
+### Installing Puppet Offline Modules
+
+Visit [Puppet Forge](https://forge.puppet.com) and search for the desired module. Download and copy it to the Puppet server.
+
+Install the module:
+```sh
+puppet module install PATHTODOWNLOAD
+```
+
+List installed packages and dependencies:
+```sh
+puppet module list
+```
+
+Create a manifest with class declarations to use the module.
+
+### Installing Puppet Online Modules
+
+If the Puppet server is online, install a module directly:
+```sh
+puppet module install MODULENAME
+```
+
+Find module names using:
+```sh
+puppet module search MODULENAME
+```
 
 ## References
-- https://www.youtube.com/watch?v=jaA1Znru-Vw
-- www.learnitguide.net
+- [YouTube Tutorial](https://www.youtube.com/watch?v=jaA1Znru-Vw)
+- [Learn IT Guide](http://www.learnitguide.net)
+- [Puppet Documentation](https://puppet.com/docs/puppet/latest/puppet_index.html)
+- [Puppet Forge](https://forge.puppet.com)
+- [Puppet Modules on GitHub](https://github.com/puppetlabs)
